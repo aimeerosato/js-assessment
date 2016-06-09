@@ -1,33 +1,26 @@
-//var Promise = require('bluebird');
 exports = typeof window === 'undefined' ? global : window;
 
 
 exports.asyncAnswers = {
   async: function(value) {
-    console.log("value ", value); //evalates to TRUE
-    // var promise = new Promise(
-    //   function(resolve, reject){
-    //     if(value){
-    //      resolve("success");
-    //     } else {
-    //       reject(Error("NO"));
-    //     }
-    //   });
-    // console.log("Here is promise: ", promise);
-    // promise.then(function(val){
-    //   console.log(val);
-    //   return val;
-    //});
-    // promise.then(
-    //     function(result){
-    //       console.log(result);
-    // })
-    // .catch(function(err){
-    //   console.log(err);
-    // });
+    var promise = jQuery.Deferred();
+    setTimeout(function(){
+        promise.resolve(value);
+    }, 500);
+    return promise.promise();
+
   },
 
   manipulateRemoteData: function(url) {
-
+    var promise = jQuery.Deferred();
+    $.get(url).done(function(data) {
+        var sorted = [];
+        for(var i = 0; i < data.people.length; i++){
+            sorted.push(data.people[i].name);
+        }
+        sorted.sort();
+        promise.resolve(sorted);
+    });
+    return promise.promise();
   }
 };
